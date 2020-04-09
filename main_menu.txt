@@ -1,0 +1,9 @@
+*Main Menu*
+
+1 Add a book
+2 Delete existing record
+3 Update field
+4 Search 
+5 Save to text file 
+6 Load to text file
+7 Exit programm

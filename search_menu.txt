@@ -1,0 +1,10 @@
+*Search Menu* 
+
+1. Special search
+2. Title
+3. Author
+4. Date of publication
+5. Book type 
+6. ISBN 
+7. Number of pages
+8. Exit search 
