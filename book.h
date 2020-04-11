@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 class Book {
@@ -9,12 +10,15 @@ class Book {
 	int type;
 	double isbn[2];
 	int pages;
-	void ui_error(string field);
-	bool valid_date(int date);
+	string type_to_string(int n);
+	friend ostream& operator<<(ostream&, const Book&);
+	friend istream& operator>>(istream&, Book&);
+	bool valid_year(int date);
 	bool is_ten_digit(double entry);
 	bool valid_isbn(double entry);
 public: 
 	Book();
+	void print();
 	void set_title();
 	void set_author();
 	void set_date();

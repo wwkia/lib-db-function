@@ -2,11 +2,11 @@
 #define MENU_H
 #include <string>
 
+void ui_error();
+
 class Menu {
 	const std::string file_name;
 	const int num_choices;
-	void clrscr();
-	void ui_error();
 	bool is_menu_choice(int choice);
 public :
 	Menu(std::string f, int n);

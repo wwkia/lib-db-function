@@ -1,0 +1,5 @@
+How would you like to edit? 
+
+1 Browse database
+2 Search for an entry
+3 Exit to main menu

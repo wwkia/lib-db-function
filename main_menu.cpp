@@ -1,48 +1,54 @@
+//NOTE LOGIC FOR SWITCHING HAS BEEN TESTED AND RUN
 #ifdef MAIN_MENU_CPP
 #define MAIN_MENU_CPP
-#include "main_menu.h"
-#include <iostream>
 #include "menu.h"
+#include "main_menu.h"
+#include "database.h"
+#include <iostream>
 
-class Main_menu : public Menu {
-	public:
-		Main_menu(std::string f, int n);
-		void switch_main(int choice);
-		void add();
-		void del();
-		void update();
-		void search();
-		void save();
-		void load();
-};
-
-Main_menu::Main_menu(std::string f, int n) 
+using namespace std;
+//constructor for main menu
+Main_menu::Main_menu(string f, int n) 
 : Menu(f,n) {}
 
-void Main_menu::switch_main(int choice) {
+//switch funtion for navigating the main menu
+void Main_menu::switch_main(int choice, Database db) {
 	switch(choice) {
-   		/*case 1 
-   			add();
+   		case 1:
+   			int state=db.add();
+   			//opens add function if user chose to add again
+   			if (state==1)
+   				switch_main(1,db);
    			break;
    		case 2: 
-   			del();
+   			int state=db.del();
+   			//open delete function if user chose to delete again
+   			if (state==1)
+   				switch_main(2,db);
    			break;
    		case 3:
-   			update();
+   			int state=db.update();
+   			if (state==1)
+   				switch_main(3,db);
    			break;
    		case 4:
-   			search();
+   			int state=db.search(0);
    			break;
    		case 5:
-   			save();
-   			break;*/
-   		case 6:
-   			//load();
-   			std::cout << "i like coffee";
+   			int state=db.save();
+   			//opens save function if error occurred and user chose to try again
+   			if (state==1)
+   				switch_main(5);
    			break;
+   		case 6:
+   			int state=db.load();
+   			//opens load function if error occurred and the user chose to try gain
+   			if (state==1)
+   				switch_main(6);
+   			break;  		
    		case 7:
+   			cout << clrscrn << "Goodbye!";
    			break;
    		}
 }
-int main () {return 0;}
 #endif

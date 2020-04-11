@@ -1,32 +1,61 @@
+#include <iostream>
 #include <string>
 #include <vector>
 #include <book.h>
+#include "conmanip.h"
+
 using namespace std;
 
-ISBN::isbn(vector<int> n) 
-: nums(n) {}
+//constructor for the Book class
 Book::Book()
-:Book() {}
-void Book::ui_error(string field) {
-	cin.clear();
-	cin.ignore();
-    cout << "\r" << red << "Please enter a valid" << bold << field << def_txt;
+:title(""), author(""), date(0), type(0), isbn={0,0}, pages(0) {}
+//returns the integer book type as the string which the int represents
+string Book::type_to_string (int n) {
+	if (type==1) 
+		return << "hard cover";
+	if (type==2)
+		return << "soft cover";
+	if (type==3)
+		return << "digital";
 }
-void Book::valid_year(int date) {
+//operator overload enables printing of a book
+ostream& operator<<(ostream& out, const Book& entry) {
+	str_type=Book.type_to_string(entry.type);
+	return out << entry.title << "*" << entry.author << "*"<< entry.date << "-"
+	           << str_type << "*" << entry.isbn[0] << "*" << entry.isbn[1] << "*" << entry.pages <<'\n';
+}
+//operator overload enables filling a book object with a line of text sepatated by '*'
+istream & operator>>(istream& in, Book& entry){
+	char del; //holds delimiter ('*')
+	string nl_holder; //holds newline character
+	//associates object fill with getline when >> is called
+	return getline(getline(getline(in,entry.title,'*'), entry.author, '*') >> entry.date >> del
+		   >> entry.isbn[0] >> del >> entry.isbn[1] >> del >> entry.pages, nl_holder);
+}
+//prints  book entry to console
+void Book::print() {
+	cout << "\n" << bold << title << def_txt << "*";
+	cout << author << "*";
+	cout << date << "*";
+	cout isbn[0] << "*" << isbn[1]<< "*";
+	cout << pages;
+
+}
+bool Book::valid_year(int date) {
 	current_year = tm_year + 1900;
 	return (date>1000 && date <= current_year);
 }
 void Book::set_title() {
 	string ttl;
 	cout << "\nTitle: ";
-	while (!(cin>>ttl)) 
+	while (!(getline(cin,ttl))) 
 		ui_error("title");
 	title=ttl;
 }
 void Book::set_author() {
 	string aut;
 	cout << "\nAuthor: ";
-	while(!(cin>>aut)) 
+	while(!(getline(cin, aut))) 
 		ui_error("author");
 	author=aut;
 }
@@ -44,13 +73,13 @@ void Book::set_type() {
 	type=types.get_ui();
 }
 bool Book::is_ten_digit(double entry) {
-	return (entry < 10000000000 && entry > 999999999)
+	return (entry < 10000000000 && entry > 999999999);
 }
 bool Book::valid_isbn (double entry) {
-	return ((is_ten_digit) || (entry < 10000000000000 && entry > 999999999999))
+	return ((is_ten_digit) || (entry < 10000000000000 && entry > 999999999999));
 }
 void Book::set_isbn() {
-	vector<double> new_isbn;
+	double new_isbn[2]={0,0};
 	int n;
 	cout << "\nHow many ISBNs?";
 	while (!(cin>>n))
@@ -61,16 +90,15 @@ void Book::set_isbn() {
 		while (!(cin>>isbn_entry)|| !(valid_isbn(isbn_entry)))
 			ui_error("ISBN number");
 		if (is_ten_digit(isnbn_entry))
-			new_isbn[0]=isbn_entry;
+			isbn[0]=isbn_entry;
 		else 
-			new_isbn[1]=isbn_entry;
+			isbn[1]=isbn_entry;
 	}
-	isbn=new_isbn;
 }
 void set_pages() {
 	int pgs;
 	cout << "\n# of pages: ";
 	while (!(cin>>pages)) 
-		ui_error("number of pages")
-	pages =pgs;
+		ui_error("number of pages");
+	pages=pgs;
 }

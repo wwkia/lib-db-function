@@ -1,0 +1,7 @@
+//menu for confirming entry
+
+Confirm entry?
+
+1 Yes
+2 Update field
+3 Back to main menu

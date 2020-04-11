@@ -1,0 +1,6 @@
+//displays options when database has an error
+
+What would you like to do?
+
+1 Do it again
+2 Back to main menu
