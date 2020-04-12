@@ -54,6 +54,8 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 				break;
 			case 7:
 				break;
+			default:
+				break;
 		}
 	}
 }
@@ -71,7 +73,7 @@ int Database::add() {
 	int choice=0;
 	do {
 		//ask user to confirm the addition
-    	choice=entry_confirm(temp);
+    		choice=entry_confirm(temp);
 		//adds the entry to the data base 
 		if (choice==1) {
 			lib.push_back(temp);
