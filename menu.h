@@ -1,3 +1,6 @@
+
+//TESTED
+
 #ifdef MENU_H 
 #define MENU_H
 #include <string>
