@@ -159,9 +159,9 @@ int Database::update() {
 //search for an entry
 int Database::search(bool search_type) {
 	//display the search menu
-	Menu search_menu("search_menu.txt",8);
+	Menu search_menu("search_menu.txt",9);
 	int search_choice=search_menu.get_ui();
-	//process chosen search
+	//process chosen search type (EX by title)
 	int switch_result=switch_search(search_choice,search_type);	
 	//user chose to exit to main
 	if (switch_result==0) 
