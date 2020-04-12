@@ -129,6 +129,7 @@ int Database::del() {
 		int i=search(1);
 		if (i==0)//if user choice to return to main menu in the search function
 			return 0;
+		//delete chosen book in database library
 		lib.erase(liv.begin()+(i-1));
 		return db_fn_exit(true, "Entry deleted.");
 	}
@@ -157,6 +158,7 @@ int Database::update() {
 		//if the user chose to return to main menu in the search function
 		if (i==0)
 			return 0;
+		//update chosen book in database library
 		update_book(database.at(i-1));
 		return db_fn_exit(true, "Entry updated.");
 	}
@@ -166,7 +168,7 @@ int Database::update() {
 //search for an entry
 int Database::search(bool search_type) {
 	//display the search menu
-	Menu search_menu("search_menu.txt",8);
+	Menu search_menu("search_menu.txt",9);
 	int search_choice=search_menu.get_ui();
 	//process chosen search
 	int switch_result=switch_search(search_choice,search_type);	
@@ -176,11 +178,7 @@ int Database::search(bool search_type) {
 	//user chose to search again
 	if (switch_result==-1) 
 		search(search_type);
-	//
-	//PLEASE IMPLEMENT THIS
-	//return one more than index to edit	
-	//
-
+	return switch_result;
 }
 //collects a file name from the user 
 string Database::ui_file_name() {
