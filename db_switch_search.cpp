@@ -157,11 +157,12 @@ vector<Book> def_sort_books(vector<Book> result){
 //processes the chosen search type (EX searches by author)
 int Database::switch_search(int choice, bool search_type) {
 	vector<Book> results;
+	Book search_temp();
 	switch (choice) {
 			//searches database by title
 			case 1:
-				//get vector containing books that match user defined title
-				string search_title;
+				search_temp.set_title();
+				string search_title=temp.title;
 				while (!(cin>>search_title))
 					ui_error("title");
 				vector<Book> results=find(search_title, "*", "*", "*", "*", "*", "*", lib);
@@ -174,7 +175,8 @@ int Database::switch_search(int choice, bool search_type) {
 				break;
 			//searches database by author
 			case 2:
-				string search_author;
+				search_temp.set_author();
+				string search_author=temp.author;
 				while (!(cin>>search_author))
 					ui_error("author");
 				vector<Book> results=find("*", search_author, "*", "*", "*", "*", "*", lib);
@@ -187,7 +189,8 @@ int Database::switch_search(int choice, bool search_type) {
 				break;
 			//searches database by date
 			case 3:
-				string search_date;
+				search_temp.set_date();
+				string search_date=to_string(temp.date);
 				while (!(cin>>search_date))
 					ui_error("date");
 				vector<Book> results=find("*", "*", search_date, "*", "*", "*", "*", lib);
@@ -200,7 +203,8 @@ int Database::switch_search(int choice, bool search_type) {
 				break;
 			//searches database by date
 			case 4:
-				string search_type;
+				search_temp.set_type();
+				string search_type=type_to_string(search_temp.type);
 				while (!(cin>>search_type))
 					ui_error("type");
 				vector<Book> results=find("*", "*", "*", search_type, "*", "*", "*", lib);
@@ -214,6 +218,7 @@ int Database::switch_search(int choice, bool search_type) {
 			//searches database by ISBN 10 digit
 			case 5:
 				string search_isbn10;
+				cout << "\nISBN10: ";
 				while (!(cin>>search_isbn10))
 					ui_error("isbn10");
 				vector<Book> results=find("*", "*", "*", "*", search_isbn10, "*", "*", lib);
@@ -227,6 +232,7 @@ int Database::switch_search(int choice, bool search_type) {
 			//searches database by ISBN 13 digit
 			case 6:
 				string search_isbn13;
+				cout << "\nISBN 13: ";
 				while (!(cin>>search_isbn13))
 					ui_error("isbn13");
 				vector<Book> results=find("*", "*", "*", "*", "*", search_isbn13, "*", lib);
@@ -239,7 +245,8 @@ int Database::switch_search(int choice, bool search_type) {
 				break;
 			//searches database by # of pages
 			case 7:
-				string search_pages;
+				search_temp.set_pages();
+				string search_pages=to_string(temp.pages);
 				while (!(cin>>search_pages))
 					ui_error("pages");
 				vector<Book> results=find("*", "*", "*", "*", "*", "*", search_pages, lib);
@@ -252,14 +259,24 @@ int Database::switch_search(int choice, bool search_type) {
 				break;
 			//searches database by multiple parameters
 			case 8:
-				// send in all parameters to search as strings
-				// search function returns an unsorted vector of books with matching strings
-				// calling def_sort_books on this will sort by relevancy (searchmatch) first, then name, author, etc.
-				return 0;
+				//
+				// SOLVE THIS
+				//
+				cout << "Enter * for unknown fields";
+				search_temp.set_title();
+				string search_title=search_temp.title;
+				search_temp.set_author();
+				string search_author=search_temp.author();
+				search_temp.set_date();
+				string search_date=to_string(search_temp.date);
+				search_temp.set_type();
+				string search_type=type to
+			search_type, search_isbn10, search_isbn13, search_pages;
+				
+			
 				break;
 			default:
 				return 0;
 				break;
-
 		}
 }
