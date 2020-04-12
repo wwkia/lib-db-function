@@ -8,7 +8,7 @@ using namespace std;
 
 //constructor for the Book class
 Book::Book()
-:title(""), author(""), date(0), type(0), isbn={0,0}, pages(0) {}
+:title(""), author(""), date(0), type(0), isbn({0,0}), pages(0) {}
 //returns the integer book type as the string which the int represents
 string Book::type_to_string (int n) {
 	if (type==1) 
@@ -81,9 +81,11 @@ bool Book::valid_isbn (double entry) {
 void Book::set_isbn() {
 	double new_isbn[2]={0,0};
 	int n;
-	cout << "\nHow many ISBNs?";
-	while (!(cin>>n))
+	cout << "\nHow many ISBNs? (1 or 2)";
+	//cin an int # of isbns that is = to 1 or 2
+	while (!(cin>>n) || (n>2) || (n<1))
 		ui_error("number of ISBNs");
+	//collect isbns and put them into the array (10 digit at [0] 13 at [1]
 	for (int i=1;i<=n;i++) {
 		double isbn_entry;
 		cout << "ISBN #" << i << ": ";
