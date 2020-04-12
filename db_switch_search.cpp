@@ -6,7 +6,7 @@ using namespace std;
 //print a vector of books to the console as a numbered list
 void console_print(const vector<Book>& v) {
 	int i=1;
-	for (auto& entry : v) {
+	for (auto& entry : v) { //for each entry in v print index and entry
 		cout << i << " " << entry; //works because << was overloaded 
 		i++;
 	}
@@ -26,7 +26,7 @@ int Database::pure_search(vector<Book>& results) {
 	//exit to main
 	return 0;
 }
-
+//returns the location of a book in the database library vector
 int Database::get_update_data_loc(Book choice) {
 	for (int i = 0; i < lib.size(); i++) {
 		if (lib.at(i).name == choice.name)
@@ -54,13 +54,11 @@ int Database::edit_search(vector<Book>& results) {
 		print_menu_file("search_results.txt",results);
 		Menu search_results("search_results.txt",results.size());
 		int edit_entry=search_results.get_ui;
-
-		Book choice = results.at(edit_entry - 1);
-		int update_loc = get_update_data_loc(choice);
-		//
-		//PLEASE IMPLEMENT THIS
-		//we need to return the location of the result in the database vector here
-		//
+		//locate book in the result vector
+		Book edit_choice = results.at(edit_entry - 1);
+		//get the location of the chosen book in the database library vector
+		int update_loc = get_update_data_loc(edit_choice);
+		//return it's location (+1 because 0= return to main, the 1 is removed when processing later) 
 		return update_loc + 1;
 	}
 	//search again
@@ -155,23 +153,12 @@ vector<Book> def_sort_books(vector<Book> result){
 		
 		return result;
 	}
-//
-// IMPLEMENT A FUNCTION WHICH RETURNS A VECTOR OF BOOKS 
-// IT MUST SEARCH THE DATABASE ONLY FOR THE PARAMETERS NOT ENTERED AS A NULL CHARACTER (EX '*')
-//
-//
 
-//
-// IMPLEMENT A FUNCTION WHICH RETURNS A VECTOR OF BOOKS
-// IT MUST BE ABLE TO SORT BY RELEVENCY, TITLE, AUTHOR, DATE, NUMBER OF PAGES
-//
-
-
-
+//processes the chosen search type (EX searches by author)
 int Database::switch_search(int choice, bool search_type) {
 	vector<Book> results;
 	switch (choice) {
-			//searches the database by title
+			//searches database by title
 			case 1:
 				//get vector containing books that match user defined title
 				string search_title;
@@ -185,6 +172,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by author
 			case 2:
 				string search_author;
 				while (!(cin>>search_author))
@@ -197,6 +185,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by date
 			case 3:
 				string search_date;
 				while (!(cin>>search_date))
@@ -209,6 +198,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by date
 			case 4:
 				string search_type;
 				while (!(cin>>search_type))
@@ -221,6 +211,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by ISBN 10 digit
 			case 5:
 				string search_isbn10;
 				while (!(cin>>search_isbn10))
@@ -233,6 +224,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by ISBN 13 digit
 			case 6:
 				string search_isbn13;
 				while (!(cin>>search_isbn13))
@@ -245,6 +237,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by # of pages
 			case 7:
 				string search_pages;
 				while (!(cin>>search_pages))
@@ -257,6 +250,7 @@ int Database::switch_search(int choice, bool search_type) {
 				//options for choosing an entry from search to edit
 				return edit_search(results);
 				break;
+			//searches database by multiple parameters
 			case 8:
 				// send in all parameters to search as strings
 				// search function returns an unsorted vector of books with matching strings
