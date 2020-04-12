@@ -12,7 +12,7 @@ class Book {
 	int type;
 	double isbn[2];
 	int pages;
-	string type_to_string(int n);
+	string type_to_string(int n) const;
 	friend ostream& operator<<(ostream&, const Book&);
 	friend istream& operator>>(istream&, Book&);
 	bool valid_year(int date);
