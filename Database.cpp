@@ -165,7 +165,9 @@ int Database::update() {
 	//back to main menu
 	return 0;
 }
-//search for an entry
+//search for an entry 
+//type 0 is a pure search lets user (Search again/Exit to main) USED IN SWITCH MAIN
+//type 1 returns the index location of a book to edit or 0 to Exit to main USED FOR EDITING
 int Database::search(bool search_type) {
 	//display the search menu
 	Menu search_menu("search_menu.txt",9);
