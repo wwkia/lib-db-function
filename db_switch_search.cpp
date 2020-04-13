@@ -77,6 +77,14 @@ bool check_inputs(int a, const vector<int>& inputs) {
 	return false;
 }
 
+// Pre-condition:
+//   Takes in vector<book> result
+// Post-condition:
+//   This is a sort function which is called to sort the values of pages, isbn
+//   type, date, author, name and searchmatch all in that order, so that to the 
+//   the user the search appears in the reverse order, which is similar to 
+//   what a typical library search would look like.
+//	 Final returns result filled with the books sorted results
 vector<Book> def_sort_books(vector<Book> result){
 		std::sort(result.begin(), result.end(), Sort_pages());
 		std::sort(result.begin(), result.end(), Sort_isbn());
@@ -88,6 +96,17 @@ vector<Book> def_sort_books(vector<Book> result){
 		return result;
 	}
 
+// Pre-condition:
+//   Takes in vector<book> result
+// Post-condition:
+//   This is a sort function which is called to sort the values of pages, isbn
+//   type, date, author, name and searchmatch all in that order, so that to the 
+//   the user the search appears in the reverse order, which is similar to 
+//   what a typical library search would look like.
+//   The difference is this is at the user discretion and they have the ability 
+//   to search only what category they are looking for.
+//	 they can search 1 catagory all the way up to all 7 if they wish   
+//	 Final returns result filled with the books sorted results
 	vector<Book> ud_sort_books(vector<Book> result){
 		string user_req = "";
 		cout << "What would you like to sort by?\n";
@@ -95,6 +114,9 @@ vector<Book> def_sort_books(vector<Book> result){
 		cout << "Enter \"*\" to start sorting.\n"
 		cin >> user_req;
 		vector<int> inputs;
+		// This while loop checks what the user would like to sort by, their preference is then
+		// sent to check inputs to see if they have already register this as a area if search 
+		// if they have not, this will be added to the search through inputs, otherwise it will be discarded
 		while(user_req != "*") {
 			if (user_req.toLowerCase() == "name") {
 				if (!check_inputs(1, inputs)) // true: don't run if in vector, false: run if not in vector
@@ -123,6 +145,10 @@ vector<Book> def_sort_books(vector<Book> result){
 			cin << user_req;
 		}
 
+		// In this for loop the function excecutes the case which has been chosen for their search
+		// which is taken from inputs taken above
+		// Depending on the users input above the number of cases used can range from 1-7 but 
+		// there is no repetition of a single case in one search
 		for (int i = inputs.size() - 1; i > 0; i--) {
 			switch(inputs.at(i)) {
 				case 1:
