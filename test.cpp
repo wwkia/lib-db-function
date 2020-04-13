@@ -35,7 +35,7 @@ public :
 void ui_error(string field) {
 	cin.clear();
 	cin.ignore();
-    cout << "\r" << red << "Please enter a valid" << bold << field << def_txt;
+    cout << "\r" << red << "Please enter a valid " << bold << field << def_txt;
 }
 //menu constructor
 Menu::Menu(string f, int n) 
@@ -71,10 +71,11 @@ class Book {
 	string author;
 	int date;
 	int type;
-	double isbn[2];
+	unsigned long isbn[2];
 	int pages;
 	int searchmatch;
 	string type_to_string(int n) const;
+	friend int print_menu_file(string out_file, const vector<Book>& v);
 	friend class Sort_title;
 	friend class Sort_author;
 	friend class Sort_date;
@@ -103,8 +104,8 @@ class Book {
 	//friend ofstream& operator<<(ofstream&, const Book&);
 	//friend ifstream& operator>>(ifstream&, Book&);
 	bool valid_year(int date);
-	bool is_ten_digit(double entry);
-	bool valid_isbn(double entry);
+	bool is_ten_digit(unsigned long entry);
+	bool valid_isbn(unsigned long entry);
 public: 
 	Book();
 	void print();
@@ -132,8 +133,9 @@ string Book::type_to_string (int n) const {
 //operator overload enables printing of a book
 ostream& operator<<(ostream& out, const Book& entry) {
 	string str_type=entry.type_to_string(entry.type);
-	return out << entry.title << "*" << entry.author << "*"<< entry.date << "-"
+	return out << entry.title << "*" << entry.author << "*"<< entry.date << "*"
 	           << str_type << "*" << entry.isbn[0] << "*" << entry.isbn[1] << "*" << entry.pages <<'\n';
+
 }
 //operator overload enables filling a book object with a line of text sepatated by '*'
 istream & operator>>(istream& in, Book& entry){
@@ -146,17 +148,17 @@ istream & operator>>(istream& in, Book& entry){
 
 //prints  book entry to console
 void Book::print() {
+	string tp=type_to_string(type);
 	cout << "\n" << bold << title << def_txt << "*";
 	cout << author << "*";
 	cout << date << "*";
+	cout << tp << "*";
 	cout << isbn[0] << "*" << isbn[1]<< "*";
 	cout << pages;
-
 }
 void Book::set_title() {
 	string ttl;
 	cout << "\nTitle: ";
-	//cout << " i like cats";
 	while (!(getline(cin,ttl))) 
 		ui_error("title");
 	title=ttl;
@@ -178,7 +180,7 @@ bool Book::valid_year(int date) {
 void Book::set_date() {
 	int dt;
 	cout << "\nDate: ";
-	while (!(cin>>date) || !(valid_year(date)))
+	while (!(cin>>dt) || !(valid_year(dt)))
 		ui_error("date");
 	date=dt;
 	
@@ -188,14 +190,14 @@ void Book::set_type() {
 	types.display_menu();
 	type=types.get_ui();
 }
-bool Book::is_ten_digit(double entry) {
+bool Book::is_ten_digit(unsigned long entry) {
 	return (entry < 10000000000 && entry > 999999999);
 }
-bool Book::valid_isbn (double entry) {
+bool Book::valid_isbn (unsigned long entry) {
 	return ((is_ten_digit(entry)) || (entry < 10000000000000 && entry > 999999999999));
 }
 void Book::set_isbn() {
-	double new_isbn[2]={0,0};
+	unsigned long new_isbn[2]={0,0};
 	int n;
 	cout << "\nHow many ISBNs? (1 or 2)\n";
 	//cin an int # of isbns that is = to 1 or 2
@@ -203,7 +205,7 @@ void Book::set_isbn() {
 		ui_error("number of ISBNs");
 	//collect isbns and put them into the array (10 digit at [0] 13 at [1]
 	for (int i=1;i<=n;i++) {
-		double isbn_entry;
+		unsigned long isbn_entry;
 		cout << "ISBN #" << i << ": ";
 		while (!(cin>>isbn_entry)|| !(valid_isbn(isbn_entry)))
 			ui_error("ISBN number");
@@ -223,7 +225,7 @@ void Book::set_pages() {
 void Book::throwaway () {
 	string ttl;
 	while (!(getline(cin,ttl))) 
-		ui_error("title");
+		ui_error("throwaway error code 101");
 	//title=ttl;
 }
 
@@ -282,24 +284,30 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 	Menu update_menu("update_menu.txt",7);
 	update_menu.display_menu();
 	int choice=update_menu.get_ui();
-	while (choice!=update_menu.exit_code()) {
+	//while (choice!=update_menu.exit_code()) {
 		switch (choice) {
 			case 1:
+				entry.throwaway();
 				entry.set_title();
 				break;
 			case 2:
+				entry.throwaway();
 				entry.set_author();
 				break;
 			case 3:
+				entry.throwaway();
 				entry.set_date();
 				break;
 			case 4:
+				entry.throwaway();
 				entry.set_type();
 				break;
 			case 5:
+				entry.throwaway();
 				entry.set_isbn();
 				break;
 			case 6:
+				entry.throwaway();
 				entry.set_pages();
 				break;
 			case 7:
@@ -307,7 +315,7 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 			default:
 				break;
 		}
-	}
+	//}
 }
 int Database::add() {
 	cout << clrscrn << "Adding a book entry...\n\n";
@@ -337,17 +345,17 @@ int Database::add() {
 	} while (choice !=3); //choice 3 exits to main
 	return 0;
 }
-//prints a vector of books to a file with numbered entries
-int print_menu_file(string out_file, const vector<Book>& v) {
-	ofstream out;
+//prints a vector of books to a file with numbere entries
+int print_menu_file(string out_file, vector<Book>& v) {
+	fstream out;
 	out.open(out_file);
 	if (out.fail()) 
 		return db_fn_exit(false,"opening file"); //returns ui from the error menu (Try again/Exit)
 	//iterates through each entry of the vector, prints number beside each entry
-	int i=1;
-	for(auto& entry: v) {
-		out << i << " " << entry; //prints to file	
-		i++;
+	out << "fff";
+	out << v.size();
+	for (int i=0; i<v.size(); i++) {
+		out << i << " " << v.at(i);
 	}
 	return 0;
 }
@@ -370,6 +378,7 @@ int Database::del() {
 		if (n==2)
 			return 0;
 		Menu database("database.txt", lib.size());
+		database.display_menu();
 		//asks user which entry to delete
 		int del_entry=database.get_ui();
 		//delete the entry from the library vector
@@ -1273,6 +1282,7 @@ int Database::switch_search(int choice, bool search_type) {
 			case 8: {
 				cout << "\nSearch by multiple parameters.";
 				cout << "Enter * for unknown fields";
+				temp.throwaway();
 				temp.set_title();
 				string search_title=temp.title;
 				temp.set_author();
@@ -1306,6 +1316,7 @@ int Database::switch_search(int choice, bool search_type) {
 int Database::search(bool search_type) {
 	//display the search menu
 	Menu search_menu("search_menu.txt",9);
+	search_menu.display_menu();
 	int search_choice=search_menu.get_ui();
 	//process chosen search type (EX by title)
 	int switch_result=switch_search(search_choice,search_type);	
@@ -1399,7 +1410,6 @@ void Main_menu::switch_main(int choice, Database db) {
    		case 4: 
    			state=db.search(0);
    			break;
-
    		case 5:
    			state=db.save();
    			//opens save function if error occurred and user chose to try again
