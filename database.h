@@ -3,9 +3,9 @@
 #include "book.h"
 class Database {
 	vector<Book> lib;
+	int print_to_file(string out_file);
 public:
 	Database();
-	int db_fn_exit(bool fn_state, string fn_msg);
 	int entry_confirm(Book& entry);
 	void update_book(Book& entry);
 	int add();
