@@ -67,6 +67,381 @@ int Database::edit_search(vector<Book>& results) {
 	//exit to main
 	return 0;
 }
+//FIND FUNCTION
+// Checks if the located book is already in results
+	// Pre-condition:
+		//   Takes in: vector<Book>, result, Book check
+		// Post-condition:
+		//	 This function is within the if statments below in which it checks the 
+		//   the book which is being past through to see if it os already in results
+		//   if it is in result the function returns i and if not it returns 
+		//   -1 (false)
+	int check_books(vector<Book> result, Book check) {
+		for (int i = 0; i < result.size(); i++)
+			if (result.at(i).name == check.name)
+				if (result.at(i).author == check.author)
+					if (result.at(i).date == check.date)
+						if (result.at(i).type == check.type)
+							if (result.at(i).isbn[0] == check.isbn[0])
+								if (result.at(i).isbn[1] == check.isbn[1])
+									if (result.at(i).pages == check.pages)
+										return i;
+		return -1;
+	}
+
+	// Pre-condition:
+	//   Takes in: ui_name, ui_author, ui_date, ui_type, ui_isbn10, ui_isbn13, ui_pages
+	// Post-condition:
+	//   Goes though all of the if blocks, which use the binary search function to find
+	//   the desired name, author, date, type, isbn ot # of pages
+	//   returns the vector results with all of the books that match
+	vector<Book> find(const string& ui_name, const string& ui_author,
+					  const string& ui_date, const string& ui_type,
+					  const string& ui_isbn10, const string& ui_isbn13,
+					  const string& ui_pages, vector<Book>& books){
+		vector<Book> result;
+		int res_loc = 0;
+		int cur_res = 0;
+		// search by name
+
+		// Pre-condition:
+		//   Takes in ui_name
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same name match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_name != "*") {
+			std::sort(result.begin(), result.end(), Sort_name());
+			int name_loc = binary_search_name(ui_name, books, books.begin(), books.end());
+			while (name_loc != -1){
+				// this is for the binary search name
+				result.push_back(books.at(name_loc));
+				result.at(result.size() - 1).searchmatch += 1;
+				books.erase(name_loc);
+				name_loc = binary_search_name(ui_name, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+			cur_res = result.size();
+		}
+
+		// Pre-condition:
+		//   Takes in ui_author
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same author match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_author != "*"){
+			std::sort(result.begin(), result.end(), Sort_author());;
+			int author_loc = binary_search_author(ui_author, books, books.begin(), books.end());
+			while (author_loc != -1){
+			// this is for the binary search name
+				res_loc = check_books(result, books.at(author_loc));
+				if (res_loc != -1) {
+					result.at(res_loc).searchmatch += 1;
+				} else {
+					result.push_back(books.at(author_loc));
+				}
+				books.erase(author_loc);
+				author_loc = binary_search_author(ui_author, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+			cur_res = result.size();
+		}
+
+		// Pre-condition:
+		//   Takes in ui_date
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same date match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_date != "*"){
+			std::sort(result.begin(), result.end(), Sort_date());
+			int date_loc = binary_search_date(ui_date, books, books.begin(), books.end());
+			while (date_loc != -1){
+				// this is for the binary search name
+				res_loc = check_books(result, books.at(date_loc));
+				if (res_loc != -1) {
+					result.at(res_loc).searchmatch += 1;
+				} else {
+					result.push_back(books.at(date_loc));
+				}
+				books.erase(date_loc);
+				date_loc = binary_search_date(ui_date, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+			cur_res = result.size()
+		}
+
+		// Pre-condition:
+		//   Takes in ui_type
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same type match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_type != "*"){
+			std::sort(result.begin(), result.end(), Sort_type());
+			int type_loc = binary_search_type(ui_type, books, books.begin(), books.end());
+			while (type_loc != -1){
+				// this is for the binary search name
+				res_loc = check_books(result, books.at(type_loc));
+				if (res_loc != -1) {
+					result.at(res_loc).searchmatch += 1;
+				} else {
+					result.push_back(books.at(type_loc));
+				}
+				books.erase(type_loc);
+				type_loc = binary_search_type(ui_type, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+			cur_res = result.size();
+		}
+
+		// Pre-condition:
+		//   Takes in ui_isbn10
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same isbn10 match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_isbn10 != "*"){
+			std::sort(result.begin(), result.end(), Sort_isbn10());
+			int isbn10_loc = binary_search_isbn10(ui_isbn10, books, books.begin(), books.end());
+			while (isbn10_loc != -1){
+				// this is for the binary search name
+				res_loc = check_books(result, books.at(isbn10_loc));
+				if (res_loc != -1) {
+					result.at(res_loc).searchmatch += 1;
+				} else {
+					result.push_back(books.at(isbn10_loc));
+				}
+				books.erase(isbn10_loc);
+				isbn10_loc = binary_search_isbn10(ui_isbn10, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+			cur_res = result.size();
+		}
+
+		// Pre-condition:
+		//   Takes in ui_isbn13
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same isbn13 match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_isbn13 != "*"){
+			std::sort(result.begin(), result.end(), Sort_isbn13());
+			int isbn13_loc = binary_search_isbn13(ui_isbn13, books, books.begin(), books.end());
+			while (isbn13_loc != -1){
+				// this is for the binary search name
+				res_loc = check_books(result, books.at(isbn13_loc));
+				if (res_loc != -1) {
+					result.at(res_loc).searchmatch += 1;
+				} else {
+					result.push_back(books.at(isbn13_loc));
+				}
+				books.erase(isbn10_loc);
+				isbn13_loc = binary_search_isbn13(ui_isbn13, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+			cur_res = result.size();
+		}
+
+		// Pre-condition:
+		//   Takes in ui_pages
+		// Post-condition:
+		//   sorts values and then completes a binary search of the entities
+		//	 If no books with the same pages match the while loop terminates and the
+		//   the for loop is skiped and cur_res is not incremented
+		//   If a book is found it is placed in results and then the function
+		//   Increments the value of cur_res for next statement
+		if (ui_page != "*"){
+			std::sort(result.begin(), result.end(), Sort_pages());
+			int pages_loc = binary_search_pages(ui_pages, books, books.begin(), books.end());
+			while (pages_loc != -1){
+				// this is for the binary search name
+				res_loc = check_books(result, books.at(pages_loc));
+				if (res_loc != -1) {
+					result.at(res_loc).searchmatch += 1;
+				} else {
+					result.push_back(books.at(pages_loc));
+				}
+				books.erase(pages_loc);
+				pages_loc = binary_search_pages(ui_pages, books, books.begin(), books.end());
+			}
+			for (int i = cur_res; i < result.size(); i++){
+				books.push_back(result.at(i));
+				books.at(books.size() - 1).searchmatch = 0;
+			}
+		}
+		return result;
+	}
+
+
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_name(const string& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+    		if (books.at(mid).name == x) {          // found x!
+      			return mid;
+    		} else if (x < books.at(mid).name) {
+      			end = mid;
+    		} else if (x > books.at(mid).name) {
+      			begin = mid + 1;
+    		}
+  		}
+ 		return -1;                    // x not found
+	}
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_author(const string& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+   			if (books.at(mid).author == x) {          // found x!
+      			return mid;
+    		} else if (x < books.at(mid).author) {
+      			end = mid;
+    		} else if (x > books.at(mid).author) {
+      			begin = mid + 1;
+    		}
+  		}
+  		return -1;                    // x not found
+	}
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_date(const int& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+    		if (books.at(mid).date == x) {          // found x!
+      			return mid;
+    		} else if (x < books.at(mid).date.to_string()) {
+      			end = mid;
+    		} else if (x > books.at(mid).date.to_string()) {
+      			begin = mid + 1;
+    		}
+  		}
+  		return -1;                    // x not found
+	}
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_type(const string& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+    		if (books.at(mid).type == x) {          // found x!
+      			return mid;
+   			} else if (x < books.at(mid).type) {
+      			end = mid;
+    		} else if (x > books.at(mid).type) {
+      			begin = mid + 1;
+    		}
+  		}
+  		return -1;                    // x not found
+	}
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_isbn10(const string& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+    		if (books.at(mid).isbn[0] == x) {          // found x!
+      			return mid;
+    		} else if (x < books.at(mid).isbn[0].to_string()) {
+      			end = mid;
+    		} else if (x > books.at(mid).isbn[0].to_string()) {
+      			begin = mid + 1;
+    		}
+  		}
+  		return -1;                    // x not found
+	}
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_isbn13(const string& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+    		if (books.at(mid).isbn[1] == x) {          // found x!
+      			return mid;
+    		} else if (x < books.at(mid).isbn[1].to_string()) {
+      			end = mid;
+    		} else if (x > books.at(mid).isbn[1].to_string()) {
+      			begin = mid + 1;
+    		}
+  		}
+  		return -1;                    // x not found
+	}
+
+	// Pre-condition:
+	//   v[begin] to v[end - 1] is in ascending sorted order
+	// Post-condition:
+	//   returns an index i such that v[i] == x and begin <= i < end;
+	//   if x is not found, -1 is returned
+	int binary_search_pages(const int& x, const vector<Book>& books, int begin, int end) {
+  		while (begin < end) {
+    		int mid = (begin + end) / 2;
+    		if (books.at(mid).pages.to_string() == x) {          // found x!
+      			return mid;
+    		} else if (x < books.at(mid).pages.to_string()) {
+      			end = mid;
+    		} else if (x > books.at(mid).pages.to_string()) {
+      			begin = mid + 1;
+    		}
+  		}
+  		return -1;                    // x not found
+	}
+	// END OF FIND
+	////////////////////
+	////////////////////
+
 
 bool check_inputs(int a, const vector<int>& inputs) {
 	if (inputs.size() != 0) {
