@@ -1,5 +1,9 @@
 #include <string>
 #include "menu.h"
+#include "cmpt_error.h"
+#include "comparefunc.h"
+#include "masterSort.h"
+
 
 using namespace std;
 
