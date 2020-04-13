@@ -60,7 +60,7 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 		}
 	}
 }
-//adds a book to the database FIX!!!
+//adds a book to the database 
 int Database::add() {
 	cout << clrscrn << "Adding a book entry...\n\n";
 	Book temp();
