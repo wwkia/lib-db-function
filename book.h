@@ -13,8 +13,8 @@ class Book {
 	double isbn[2];
 	int pages;
 	string type_to_string(int n) const;
-	friend ostream& operator<<(ostream&, const Book&);
-	friend istream& operator>>(istream&, Book&);
+	friend ostream& operator<<(ofstream&, const Book&);
+	friend istream& operator>>(ifstream&, Book&);
 	bool valid_year(int date);
 	bool is_ten_digit(double entry);
 	bool valid_isbn(double entry);
