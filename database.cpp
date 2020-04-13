@@ -3,17 +3,18 @@ using namespace std;
 //constructs an empty database
 Database::Database()
 : lib({}) {}
+
 //displays error or success, returns user selection to repeat function or exit to main
 int Database::db_fn_exit(bool fn_state, string fn_msg) {
 	//if state is false (error occured) print red error msg
 	if (fn_state==false)
 		cout << red << "\nError  " << fn_msg << def_txt;
 	//if state is true (function successfully executed) print green success msg
-	cout << green << "\nSuccess! " << bold << success_msg << def_txt;
+	cout << green << "\nSuccess! " << bold << fn_msg << def_txt;
 	//ask user to repeat action or exit
 	Menu db_fn_exit("db_fn_exit.txt", 2);
-	db_error_menu.display_menu();
-	int choice=db_error_menu.get_ui();
+	db_fn_exit.display_menu();
+	int choice=db_fn_exit.get_ui();
 	return choice;
 }
 //asks user to confirm entry correctness (Yes/Update/Return to main)
@@ -32,7 +33,7 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 	Menu update_menu("update_menu.txt",7);
 	update_menu.display_menu();
 	int choice=0;
-	while (choice!=display_menu.exit_code()) {
+	while (choice!=update_menu.exit_code()) {
 		switch (choice) {
 			case 1:
 				entry.set_title();
@@ -43,7 +44,7 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 			case 3:
 				entry.set_date();
 				break;
-			case 4;
+			case 4:
 				entry.set_type();
 				break;
 			case 5:
@@ -59,7 +60,7 @@ void Database::update_book(Book& entry) { //pass in the entry by reference so it
 		}
 	}
 }
-//adds a book to the database 
+//adds a book to the database FIX!!!
 int Database::add() {
 	cout << clrscrn << "Adding a book entry...\n\n";
 	Book temp();
@@ -87,18 +88,19 @@ int Database::add() {
 	} while (choice !=3); //choice 3 exits to main
 	return 0;
 }
-
-void print_menu_file(string out_file, const vector<Book>& v) {
+//prints a vector of books to a file with numbered entries
+int print_menu_file(string out_file, const vector<Book>& v) {
 	ofstream out;
 	out.open(out_file);
 	if (out.fail()) 
-		return db_error("opening file"); //returns ui from the error menu
+		return db_fn_exit(false,"opening file"); //returns ui from the error menu (Try again/Exit)
 	//iterates through each entry of the vector, prints number beside each entry
 	int i=1;
 	for(auto& entry: v) {
 		out << i << " " << entry; //prints to file	
 		i++;
 	}
+	return 0;
 }
 //deletes an entry
 int Database::del() {
@@ -111,10 +113,16 @@ int Database::del() {
 	//browse all entries to delete
 	if (choice==1) {
 		//turns the database into a menu 
-		print_menu_file("database.txt",lib);
+		int n=print_menu_file("database.txt",lib);
+		//there was an error opening the print file, user chose to try again
+		if (n==1)
+			del();
+		//there was an error opening the print file, user chose to exit to main
+		if (n==2)
+			return 0;
 		Menu database("database.txt", lib.size());
 		//asks user which entry to delete
-		del_entry=database.get_ui();
+		int del_entry=database.get_ui();
 		//delete the entry from the library vector
 		lib.erase(lib.begin()+(del_entry-1));
 		return db_fn_exit(true,"Entry deleted.");
@@ -142,8 +150,8 @@ int Database::update() {
 		print_menu_file("datavase.txt",lib);
 		Menu database("database.txt",lib.size());
 		//ask user entry to update
-		update_entry=(database.get_ui()-1);
-		update_book(database.at(update_entry));
+		int update_entry=(database.get_ui()-1);
+		update_book(lib.at(update_entry));
 		return db_fn_exit(true, "Entry updated.");
 	}
 	//search for entry to edit
@@ -178,7 +186,7 @@ int Database::search(bool search_type) {
 
 }
 //collects a file name from the user 
-string Database::ui_file_name() {
+string ui_file_name() {
 	string name;
 	cout << "\nPlease enter a file name: ";
 	while (!(cin>>name))
@@ -186,35 +194,41 @@ string Database::ui_file_name() {
 	return name;
 }
 //prints contents of database to a file 
-void Database::print_to_file(string out_file) {
+int Database::print_to_file(string out_file) {
 	ofstream out;
 	out.open(out_file);
 	if (out.fail()) 
-		return db_error("opening file"); //returns ui from the error menu
+		return db_fn_exit(false,"Could not open file."); //returns ui from the error menu
 	//iterates through each entry of the vector
 	for (auto& entry: lib) 
 		out << entry; //prints to file
+	return 0;
 }
 //saves the database to a textfile named by user
 int Database::save() {
 	//ask user for a file name and open the file
-	string save_file_name;
 	cout << clrscrn << "Save the database to a file...\n";
 	string save_file_name=ui_file_name();
-	print_to_file(save_file);
-	return db_success("Database saved");
+	int n=print_to_file(save_file_name);
+	if (n==0)
+		return db_fn_exit(true,"Database saved");
+	//error opening file, user chose to try again
+	if (n==1)
+		save();
+	//error opening file, user chose to exit to main
+	return 0;		
 }
 //loads a database from a file
 int Database::load() {
 	cout << clrscrn << "Load the database from a text file...\n";
 	//ask user for a file name and open the file
 	string load_file_name=ui_file_name();
-	ostream out;
+	fstream out;
 	out.open(load_file_name);
-	if (in.fail())
-		return db_error("opening file"); //returns ui from the error menu
+	if (out.fail())
+		return db_fn_exit(false,"opening file"); //returns ui from the error menu
 	Book temp();
 	while (out >> temp) //adds objects to database until extraction fails
 		lib.push_back(temp);
-	return db_success("\nData base loaded.");
+	return db_fn_exit(true,"\nData base loaded.");
 }
