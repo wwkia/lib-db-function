@@ -1,8 +1,9 @@
 #ifndef COMPAREFUNC_H
-#define COMPAREFUNC_H  // check syntax
+#define COMPAREFUNC_H 
 
 using namespace std;
 
+// headers of comparefunc.cpp
 class Sort_name(){
 	bool operator() (const Book& book1, const Book& book2);
 }

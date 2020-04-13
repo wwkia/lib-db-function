@@ -1,5 +1,5 @@
 #ifndef MASTERSORT_H
-#define MASTERSORT_H  // check syntax
+#define MASTERSORT_H  
 
 #include <iostream>
 #include <cassert>

@@ -4,7 +4,13 @@
 
 using namespace std;
 
-class Sort_name : Sort(){  // check syntax
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of a name of a book
+class Sort_name : Sort(){ 
 public:
 	bool operator() (const Book& book1, const Book& book2) {
 		string name1 = book1.name.toLowerCase();
@@ -17,6 +23,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of a author of a book
 class Sort_author : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
@@ -30,6 +42,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of a date of a book
 class Sort_date : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
@@ -37,6 +55,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of a type of a book
 class Sort_type : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
@@ -50,6 +74,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of a isbn of a book
 class Sort_isbn10 : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
@@ -65,6 +95,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of a isbn of a book
 class Sort_isbn13 : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
@@ -80,6 +116,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of the number of pages in a book
 class Sort_pages : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
@@ -87,6 +129,12 @@ public:
 	}
 };
 
+// Pre-condition:
+//   Takes in: Book 1 and Book 2
+// Post-condition:
+//   inherits from mastersort 
+//   compares each bool returning either true or false to the comparision
+//   of relevancy of a search of a book
 class Sort_searchmatch : Sort(){
 public:
 	bool operator() (const Book& book1, const Book& book2) {
